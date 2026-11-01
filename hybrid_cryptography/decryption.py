@@ -8,7 +8,7 @@ def decrypt_message(aes_key,nonce,ciphertext):
     plaintext=aes.decrypt(
         nonce,
         ciphertext,
-        nonce
+        None
     )
 
     return plaintext
