@@ -1,25 +1,23 @@
-from key_generation import generate_rsa_key
-from digital_signature import (
-    create_signature,
-    verify_signature
-)
+from encyption import encrypt_message
+from decryption import decrypt_message
 
 
 def main():
+    message=b"Hello BOb!, This is a secret message"
 
-    # Generate Alice Key
-    alice_private_key, alice_public_key = generate_rsa_key()
+    print("Original Message: ",message)
 
-    message = b"Hello Bob!!"
+    aes_key,nonce,ciphertext=encrypt_message(message)
 
-    # Alice signs the message
-    signature = create_signature(message, alice_private_key)
+    print("=======Encryption======")
+    print("AES Key",aes_key)
+    print("Nonce: ",nonce)
+    print("Ciphertext: ",ciphertext)
 
-    # Bob Verify the message
-    result=verify_signature(message,signature,alice_public_key)
+    plaintext=decrypt_message(aes_key,nonce,ciphertext)
+    print("=======Decryption======")
 
-    print("Signature valid: ",result)
-
+    print("Decrypted Message: ",plaintext.decode("utf-8"))
 
 if __name__=="__main__":
     main()
