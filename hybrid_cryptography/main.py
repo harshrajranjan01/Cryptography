@@ -1,42 +1,59 @@
 from key_generation import generate_rsa_key
 
-from encyption import encrypt_message
-from decryption import decrypt_message
+from digital_signature import create_signature, verify_signature
 
-from rsa_encryption import encrypt_aes_key
-from rsa_decryption import decrypt_aes_key
+from payload import create_payload
+from payload_parser import extract_payload
+
 
 def main():
-    # Generate Bob's RSA key
-    bob_private_key,bob_public_key=generate_rsa_key()
+    # Generate Alice's RSA key
+    alice_private_key, alice_public_key = generate_rsa_key()
 
-    # Original Message
-    message=b"Hello Bob! This is secret message"
+    message = "Hello Bob!, This is a secret Message"
 
-    # Alice encrypt the message using AES
-    aes_key,nonce,ciphertext=encrypt_message(message)
+    # Convert the message into bytes for signing
+    message_bytes = message.encode("utf-8")
 
-    print("[+] Message encrypted Using AES")
+    # Alice creates digit signature
+    signature = create_signature(
+        message_bytes,
+        alice_private_key
+    )
 
-    #Alice Encrypt AES key using Bob's public key
+    print("[+] Digital Signature created")
 
-    encrypted_key=encrypt_aes_key(aes_key,bob_public_key)
+    # Alice combine message and signature
+    payload_bytes = create_payload(
+        message,
+        signature
+    )
 
-    print("[+] AES key encrypted using RSA-OAEP")
+    print("[+] Payload created")
 
-    #Bob Decrypt AES key
-    decrypted_aes_key=decrypt_aes_key(encrypted_key,bob_private_key)
+    print("\nSerialized payload:")
+    print(payload_bytes.decode("utf-8"))
 
-    print("[+] AES key decrypted using RSA-OAEP")
-
-    #Bob Decrypt message using recovered AES key
-    plaintext=decrypt_message(decrypted_aes_key,nonce,ciphertext)
-
-
-    print("\nOriginal Message:", message)
-
-    print("Decrypted Message:", plaintext)
+    # Bob extracts message and signature
+    received_message,received_signature=extract_payload(
+        payload_bytes
+    )
 
 
-if __name__=="__main__":
+    print("\n[+] Payload extracted")
+    print("Received Message: ",received_message)
+
+    # Bob verifies signature
+    is_valid=verify_signature(
+        received_message.encode("utf-8"),
+        received_signature,
+        alice_public_key
+
+    )
+
+
+    print("\nSignature Valid:", is_valid)
+    
+
+if __name__ == "__main__":
     main()
