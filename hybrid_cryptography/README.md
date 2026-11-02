@@ -222,59 +222,8 @@ The application will:
 5. Verify the digital signature.
 6. Display the recovered message if verification succeeds.
 
-## 8. Current Implementation Status
-
-**Implemented features:**
-
-- [x] RSA public and private key generation
-- [x] RSA-OAEP AES key encryption
-- [x] RSA-OAEP AES key decryption
-- [x] RSA-PSS digital signature creation
-- [x] RSA-PSS digital signature verification
-- [x] AES-256-GCM encryption
-- [x] AES-256-GCM decryption
-- [x] JSON payload creation
-- [x] Payload extraction and parsing
-- [x] Alice's sending workflow
-- [x] Bob's receiving workflow
-- [x] Complete hybrid encryption and decryption workflow
-
-**Upcoming work:**
-
-- [ ] Ciphertext tampering tests
-- [ ] Nonce modification tests
-- [ ] Incorrect RSA private key tests
-- [ ] Invalid digital signature tests
-- [ ] Exception handling and error management
-- [ ] Secure payload transmission using Base64
-- [ ] Persistent RSA key storage
-- [ ] Improved key management
-- [ ] Network-based communication
-
-## 9. Security Considerations
-
-This project is currently an educational implementation.
-
-Some important considerations:
-
-- RSA private keys must remain confidential.
-- Public keys must be authenticated to prevent man-in-the-middle attacks.
-- AES-GCM nonces must never be reused with the same AES key.
-- The AES session key must be protected.
-- Invalid authentication tags and signatures must result in message rejection.
-- Private keys and secret AES keys should never be exposed in application logs.
-
-The current implementation generates new RSA key pairs each time the application runs. Persistent key management has not yet been implemented.
-
-## 10. Disclaimer
-
-This project is developed for educational purposes to understand hybrid cryptography, digital signatures, authenticated encryption, and secure key exchange.
-
-It has not yet undergone comprehensive security testing and should not be considered production-ready.
-
----
 
 **Project:** Hybrid Cryptography System  
 **Language:** Python  
 **Cryptographic Library:** Python Cryptography  
-**Status:** Core implementation completed; security testing pending.
+
