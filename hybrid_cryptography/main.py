@@ -1,59 +1,35 @@
 from key_generation import generate_rsa_key
 
-from digital_signature import create_signature, verify_signature
-
-from payload import create_payload
-from payload_parser import extract_payload
+from alice import alice_send
 
 
 def main():
-    # Generate Alice's RSA key
+
+    # Generate Alice's RSA keys
     alice_private_key, alice_public_key = generate_rsa_key()
 
-    message = "Hello Bob!, This is a secret Message"
+    # Generate Bob's RSA keys
+    bob_private_key, bob_public_key = generate_rsa_key()
 
-    # Convert the message into bytes for signing
-    message_bytes = message.encode("utf-8")
+    print("[+] Alice's RSA key generated")
+    print("[+] Bob's RSA key generated")
 
-    # Alice creates digit signature
-    signature = create_signature(
-        message_bytes,
-        alice_private_key
-    )
+    message="Hello Bob!, This is digitally signed and Encrypted Message."
 
-    print("[+] Digital Signature created")
+    print("\nOriginal Message: ",message)
 
-    # Alice combine message and signature
-    payload_bytes = create_payload(
-        message,
-        signature
-    )
+    #Alice Send the  Message
 
-    print("[+] Payload created")
+    package=alice_send(message,alice_private_key,bob_public_key)
 
-    print("\nSerialized payload:")
-    print(payload_bytes.decode("utf-8"))
+    print("\n========== TRANSMISSION ==========")
 
-    # Bob extracts message and signature
-    received_message,received_signature=extract_payload(
-        payload_bytes
-    )
+    print("\nEncrypted AES keys: ",package["encrypted_key"].hex())
+    print("\nNonce: ",package["nonce"].hex())
+    print("\nciphertext: ",package["ciphertext"].hex())
 
 
-    print("\n[+] Payload extracted")
-    print("Received Message: ",received_message)
-
-    # Bob verifies signature
-    is_valid=verify_signature(
-        received_message.encode("utf-8"),
-        received_signature,
-        alice_public_key
-
-    )
-
-
-    print("\nSignature Valid:", is_valid)
-    
+    print("\n[+] Alice's sending process completed")
 
 if __name__ == "__main__":
     main()
