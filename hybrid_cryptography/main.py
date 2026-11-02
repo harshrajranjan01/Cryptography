@@ -7,6 +7,8 @@ from bob import bob_receive
 
 def main():
 
+    print("\n=========GENERATING RSA KEYS=========\n")
+
     # Generate Alice's RSA keys
     alice_private_key, alice_public_key = generate_rsa_key()
 
@@ -23,12 +25,6 @@ def main():
     # Alice Send the  Message
     package = alice_send(message, alice_private_key, bob_public_key)
 
-    print("\n========== TRANSMISSION ==========")
-
-    print("\nEncrypted AES keys: ", package["encrypted_key"].hex())
-    print("\nNonce: ", package["nonce"].hex())
-    print("\nciphertext: ", package["ciphertext"].hex())
-
     print("\n[+] Alice's sending process completed")
     # Bob Receive the message
     received_message = bob_receive(
@@ -36,6 +32,7 @@ def main():
         bob_private_key,
         alice_public_key)
 
+    print("\n========== FINAL RESULT ==========")
     if received_message is not None:
         print("Received Message:", received_message)
     else:
